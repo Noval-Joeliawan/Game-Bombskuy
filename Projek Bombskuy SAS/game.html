@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>BOMSKUY 💣</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="game.css" />
+  </head>
+  <body>
+    <!-- PARTICLES BACKGROUND -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ===== WELCOME SCREEN ===== -->
+    <div id="welcomeScreen" class="screen active">
+      <div class="welcome-card">
+        <div class="logo-wrapper">
+          <div class="logo-glow"></div>
+          <h1 class="logo">BOMSKUY</h1>
+          <p class="tagline">Ledakkan Musuhmu!</p>
+        </div>
+
+        <div class="input-group">
+          <label>Nama Pemain</label>
+          <input
+            type="text"
+            id="playerName"
+            placeholder="Masukkan nama kamu..."
+            maxlength="20"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Mata Pelajaran</label>
+          <div class="subject-select">
+            <button class="subject-btn" type="button" data-subject="pkn">
+              🗳️ PKn
+            </button>
+            <button class="subject-btn" type="button" data-subject="sejarah">
+              📜 Sejarah
+            </button>
+            <button class="subject-btn" type="button" data-subject="agama">
+              🕌 Agama
+            </button>
+          </div>
+        </div>
+
+        <button id="startBtn" class="btn-primary">
+          <span>▶ MULAI GAME</span>
+        </button>
+        <p class="hint">atau tekan <kbd>Enter</kbd></p>
+
+        <div class="controls-hint">
+          <h3>🎮 Kontrol</h3>
+          <div class="controls-grid">
+            <span>↑↓←→</span><span>Gerak</span> <span>SPASI</span
+            ><span>Taruh Bom</span> <span>ENTER</span><span>Mulai</span>
+          </div>
+        </div>
+
+        <div class="leaderboard">
+          <h2>🏆 Leaderboard</h2>
+          <div id="leaderboardList" class="lb-list">
+            <p class="lb-empty">Belum ada skor</p>
+          </div>
+        </div>
+
+        <!-- CREDIT -->
+        <div class="credit">
+          <p>Dibuat oleh <strong>Kelompok 1</strong> - X RPL 5</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== COUNTDOWN OVERLAY ===== -->
+    <div id="countdownOverlay" class="screen">
+      <div class="countdown-box">
+        <div class="countdown-number" id="countdownNumber">3</div>
+        <div class="countdown-label">SIAP!</div>
+      </div>
+    </div>
+
+    <!-- ===== GAME SCREEN ===== -->
+    <div id="gameScreen" class="screen">
+      <div class="hud">
+        <div class="hud-item">
+          <span class="hud-icon">🧍‍♂️</span
+          ><span id="nameText" class="hud-val">Player</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-icon">❤️</span
+          ><span id="livesText" class="hud-val">3</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-icon">⭐</span
+          ><span id="scoreText" class="hud-val">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-icon">⏱️</span
+          ><span id="timerText" class="hud-val">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-icon">💣</span
+          ><span id="bombsText" class="hud-val">0/2</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-icon">😈</span
+          ><span id="enemiesText" class="hud-val">4</span>
+        </div>
+      </div>
+
+      <div class="board-wrapper">
+        <div id="gameBoard"></div>
+      </div>
+
+      <div class="game-hint">SPASI = Bom &nbsp;|&nbsp; ↑↓←→ = Gerak</div>
+    </div>
+
+    <!-- ===== GAME OVER SCREEN ===== -->
+    <div id="gameOverScreen" class="screen">
+      <div class="result-card gameover-card">
+        <div class="result-icon">💀</div>
+        <h1 class="result-title">GAME OVER</h1>
+        <div class="result-stats">
+          <div class="stat-row">
+            <span>Skor Akhir</span
+            ><span id="finalScore" class="stat-val">0</span>
+          </div>
+          <div class="stat-row">
+            <span>Waktu</span
+            ><span id="finalTime" class="stat-val">0 detik</span>
+          </div>
+          <div class="stat-row">
+            <span>Musuh Dikalahkan</span
+            ><span id="finalKills" class="stat-val">0</span>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="backMenu()">⬅ Menu Utama</button>
+        <button class="btn-primary" onclick="restartGame()">
+          🔄 Main Lagi
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== WIN SCREEN ===== -->
+    <div id="winScreen" class="screen">
+      <div class="result-card win-card">
+        <div class="result-icon win-icon">🏆</div>
+        <h1 class="result-title win-title">KAMU MENANG!</h1>
+        <div class="result-stats">
+          <div class="stat-row">
+            <span>Skor Akhir</span
+            ><span id="winScore" class="stat-val gold">0</span>
+          </div>
+          <div class="stat-row">
+            <span>Waktu</span><span id="winTime" class="stat-val">0 detik</span>
+          </div>
+          <div class="stat-row">
+            <span>Musuh Dikalahkan</span
+            ><span id="winKills" class="stat-val">0</span>
+          </div>
+        </div>
+        <button class="btn-primary btn-gold" onclick="backMenu()">
+          ⬅ Menu Utama
+        </button>
+        <button class="btn-primary" onclick="restartGame()">
+          🔄 Main Lagi
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== QUESTION MODAL ===== -->
+    <div id="questionModal" class="modal-overlay">
+      <div class="question-card">
+        <div class="question-header">📝 JAWAB SOAL!</div>
+        <div class="question-text" id="questionText">
+          Pertanyaan muncul di sini...
+        </div>
+
+        <div class="answer-options">
+          <button class="option-btn" id="btnA" data-option="A">
+            <span class="option-label">A</span>
+            <span class="option-text" id="optionA">Pilihan A</span>
+          </button>
+          <button class="option-btn" id="btnB" data-option="B">
+            <span class="option-label">B</span>
+            <span class="option-text" id="optionB">Pilihan B</span>
+          </button>
+          <button class="option-btn" id="btnC" data-option="C">
+            <span class="option-label">C</span>
+            <span class="option-text" id="optionC">Pilihan C</span>
+          </button>
+        </div>
+
+        <div class="question-timer">
+          Waktu: <span id="questionTimer">15</span>d
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MOBILE CONTROLS ===== -->
+    <div id="mobileControls">
+      <div id="joystick">
+        <div id="stick"></div>
+      </div>
+      <button id="bombBtn">💣</button>
+    </div>
+
+    <!-- SOUND EFFECT -->
+    <audio id="sfxBomb" src="assets/sounds/bomb.mp3"></audio>
+    <audio id="sfxExplode" src="assets/sounds/explosion.mp3"></audio>
+    <audio id="sfxPickup" src="assets/sounds/collect.mp3"></audio>
+    <audio id="sfxWin" src="assets/sounds/win.mp3"></audio>
+    <audio id="sfxLose" src="assets/sounds/lose.mp3"></audio>
+    <audio id="sfxStep" src="assets/sounds/step.mp3"></audio>
+    <audio id="sfxHurt" src="assets/sounds/hurt.mp3"></audio>
+    <audio id="sfxCountdown" src="assets/sounds/countdown.mp3"></audio>
+    <audio id="bgMusic" loop>
+      <source src="assets/sounds/bgsound.mp3" type="audio/mp3" />
+    </audio>
+
+    <script src="game.js"></script>
+  </body>
+</html>
